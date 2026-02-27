@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Assignment Cover Generator</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+
+<h2>Assignment Cover Generator</h2>
+
+<form id="coverForm">
+  <input name="topic" placeholder="Topic"><br><br>
+  <input name="course_title" placeholder="Course Title"><br><br>
+  <input name="course_code" placeholder="Course Code"><br><br>
+  <input name="teacher_name" placeholder="Teacher Name"><br><br>
+  <input name="teacher_designation" placeholder="Teacher Designation"><br><br>
+  <input name="teacher_department" placeholder="Teacher Department"><br><br>
+  <input name="student_name" placeholder="Student Name"><br><br>
+  <input name="student_id" placeholder="Student ID"><br><br>
+  <input name="session" placeholder="Session"><br><br>
+  <input name="submission_date" placeholder="Submission Date"><br><br>
+
+  <button type="submit">Generate DOCX</button>
+</form>
+
+<script>
+document.getElementById("coverForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
+
+  const response = await fetch("/api/generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+
+  const blob = await response.blob();
+  const url = window.URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "Assignment_Cover.docx";
+  a.click();
+});
+</script>
+
+</body>
+</html>
